@@ -18,6 +18,9 @@ from django.contrib import admin
 from django.urls import path
 from django.conf.urls import include, url
 from rest_framework import routers
+
+from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token
+
 # from project_api.posts.api import views
 
 # router = routers.DefaultRouter()
@@ -27,4 +30,7 @@ from rest_framework import routers
 urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^', include(('posts.api.urls', 'posts'), namespace="posts")),
+    url(r'^api-token-auth/', obtain_jwt_token),
+    url(r'^api-token-refresh/', refresh_jwt_token),
+
 ]

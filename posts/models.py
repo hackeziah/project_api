@@ -1,4 +1,10 @@
 from django.db import models
+from django.db.models import Q
+from django.contrib.auth.models import User
+
+# from project_api import settings
+# from rest_framework import settings
+# from settings import AUTH_USER_MODEL
 
 
 class Category(models.Model):
@@ -17,7 +23,7 @@ class Post(models.Model):
         (PUBLISH, "Publish"),
         (NOT_PUBLISH, "Not Publish"),
     )
-
+    # user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(verbose_name="title", max_length=255)
     content = models.TextField(
         max_length=255, help_text="Type Your Content Here")

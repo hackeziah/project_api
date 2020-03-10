@@ -2,13 +2,17 @@ from ..models import Post, Category
 from .serializers import PostSerializer
 from rest_framework import generics
 from rest_framework import viewsets
+from rest_framework import permissions
+
+from rest_framework.filters import (OrderingFilter)
 from rest_framework.generics import (
     ListAPIView,
     CreateAPIView,
     RetrieveAPIView,
     ListCreateAPIView,
-    UpdateAPIView,
-    DestroyAPIView
+    RetrieveUpdateAPIView,
+    DestroyAPIView,
+    UpdateAPIView
 )
 
 from .serializers import (
@@ -20,9 +24,14 @@ from .serializers import (
 # POST
 
 
-class PostUpdateAPI(generics.UpdateAPIView):
+class PostUpdateAPI(generics.RetrieveUpdateAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+    permissions_classes = [
+        permissions.IsAdminUser,
+        permissions.IsAuthenticated
+    ]
+
     lookup_field = 'id'
 
 
@@ -32,20 +41,22 @@ class PostDestroyAPI(generics.DestroyAPIView):
     lookup_field = 'id'
 
 
+class PostDetailView(generics.RetrieveAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    lookup_field = 'id'
+
+
 class PostCreateAPI(generics.CreateAPIView):
     queryset = Post.objects.all()
+    perssion_classes = [permissions.IsAuthenticated]
     serializer_class = PostCreateSerializer
 
 
 class PostList(generics.ListAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-
-
-class PostDetailView(generics.RetrieveAPIView):
-    queryset = Post.objects.all()
-    serializer_class = PostSerializer
-    lookup_field = 'id'
+    filter_backends = [OrderingFilter]
 
 # Category
 
